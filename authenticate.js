@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { JsonWebTokenError } = require('jsonwebtoken');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -7,7 +8,6 @@ var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jsonwebtoken');
 var FacebookTokenStrategy = require('passport-facebook-token');
 
-var config = require('./config');
 const user = require('./models/user');
 
 exports.local = passport.use(new LocalStrategy(User.authenticate()));
@@ -15,13 +15,13 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 exports.getToken = function(user) {
-    return jwt.sign(user,config.secretKey,
+    return jwt.sign(user,process.env.secretKey,
         {expiresIn: 3600});
 };
 
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = config.secretKey;
+opts.secretOrKey = process.env.secretKey;
 
 exports.jwtPassport = passport.use(new JwtStrategy(opts, (jwt_payload,done) => {
     console.log("JWT payload: ",jwt_payload);

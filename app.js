@@ -1,3 +1,4 @@
+require("dotenv").config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -6,8 +7,6 @@ var logger = require('morgan');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 var passport =require('passport');
-
-var config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -22,7 +21,7 @@ const mongoose = require('mongoose');
 
 
 
-const url = config.mongoUrl;
+const url = process.env.mongoUrl;
 
 mongoose
   .connect(url, {
